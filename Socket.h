@@ -34,10 +34,12 @@ class Socket
   bool connect ( const std::string host, const int port );
 
   // Data Transimission
-  bool send ( const std::string ) const;
-  bool sendFile (const std::string) const;
-  int recv ( std::string& ) const;
-  int revcFile() ;
+  bool send ( const std::string ) const;//(2) а тут передаем строку
+  int recv ( std::string& ) const;//(1)почему тут передаем ссылку 
+
+  //File transmission
+  bool sendF ( const std::string ) const;
+  bool recvF ( const std::string ) const;//bool?
 
 
   void set_non_blocking ( const bool );

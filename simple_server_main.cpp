@@ -14,7 +14,7 @@ int main ( int argc, int argv[] )
     {
       // Create the socket
       ServerSocket server ( 30000 );
-	  std::string data;
+	  std::string data = "";
       while ( true )
 	{
 	  ServerSocket new_sock;
@@ -22,7 +22,6 @@ int main ( int argc, int argv[] )
 
 	  try
 	    {
-			//передача файла https://github.com/psp316r/File-Transfer-Using-TCP-Socket-in-C-Socket-Programming
 			while ( true )
 			{
 				new_sock >> data;
@@ -33,14 +32,20 @@ int main ( int argc, int argv[] )
 					time_t now = time(0);
 					char* dt = ctime(&now);
 					new_sock << dt;
-				}else if( data == "echo")
+					
+				} else if (data == "file")
+				{
+					//отправляем по факту строки и пишем в файл
+					//для этого написать надо функцию
+					
+				} else if( data == "echo")
 				{	
 					//доделать этот блок
 					//глянуть в сторону регулярных выражений
 					new_sock << data;
 				}
 				else{
-					new_sock << "No command";
+					new_sock << "No such command";
 				}
 			}
 	    }

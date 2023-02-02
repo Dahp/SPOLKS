@@ -124,11 +124,6 @@ bool Socket::send ( const std::string s ) const
     }
 }
 
-bool Socket::sendFile(const std::string s) const
-{
-    return false;
-}
-
 int Socket::recv ( std::string& s ) const
 {
   char buf [ MAXRECV + 1 ];
@@ -153,6 +148,20 @@ int Socket::recv ( std::string& s ) const
       s = buf;
       return status;
     }
+}
+
+bool Socket::recvF( const std::string s ) const
+{
+  //тут мы получаем имя файла который хочет получить тот кто спрашивает
+  //мы передаем сюда имя файла, 
+  // во ттут вопрос: мне надо вызывать функцию recv и тут написать свою функцию
+  //аналогично recv 
+    return false;
+}
+
+bool Socket::sendF( const std::string s ) const
+{
+    return false;
 }
 
 
@@ -185,9 +194,7 @@ void Socket::set_non_blocking ( const bool b )
   opts = fcntl ( m_sock, F_GETFL );
 
   if ( opts < 0 )
-    {
-      return;
-    }
+    return;
 
   if ( b )
     opts = ( opts | O_NONBLOCK );

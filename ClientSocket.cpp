@@ -39,3 +39,19 @@ const ClientSocket& ClientSocket::operator >> ( std::string& s ) const
 
   return *this;
 }
+
+void ClientSocket::recvFile(const std::string s) const
+{
+  if ( ! Socket::recvF ( s ) )
+  {
+    throw SocketException ( "Could not recv file." );
+  }
+}
+
+void ClientSocket::sendFile(const std::string s) const
+{
+  if ( ! Socket::sendF ( s ) )
+  {
+    throw SocketException ( "Could not send file." );
+  }
+}

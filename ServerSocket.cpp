@@ -50,10 +50,34 @@ const ServerSocket& ServerSocket::operator >> ( std::string& s ) const
   return *this;
 }
 
-void ServerSocket::accept ( ServerSocket& sock )
+// void ServerSocket::sendFile() const
+// {
+//   if ( ! Socket::sendF () )
+//     {
+//       throw SocketException ( "Could not send file ." );
+//     }
+// }
+
+void ServerSocket::accept(ServerSocket &sock)
 {
   if ( ! Socket::accept ( sock ) )
     {
       throw SocketException ( "Could not accept socket." );
     }
+}
+
+void ServerSocket::recvFile(const std::string s ) const
+{
+  if ( ! Socket::recvF ( s ) )
+  {
+    throw SocketException ( "Could not recv file." );
+  }
+}
+
+void ServerSocket::sendFile(const std::string s ) const
+{
+  if ( ! Socket::sendF ( s ) )
+  {
+    throw SocketException ( "Could not send file." );
+  }
 }
