@@ -35,10 +35,11 @@ class Socket
 
   // Data Transimission
   bool send ( const std::string ) const;
-  bool sendFile (const std::string) const;
   int recv ( std::string& ) const;
-  int revcFile() ;
 
+  //File transmission
+  bool getF ( const std::string ) const; 
+  bool sendF () const;
 
   void set_non_blocking ( const bool );
 
