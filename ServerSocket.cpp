@@ -65,3 +65,19 @@ void ServerSocket::accept(ServerSocket &sock)
       throw SocketException ( "Could not accept socket." );
     }
 }
+
+void ServerSocket::recvFile(const std::string s ) const
+{
+  if ( ! Socket::recvF ( s ) )
+  {
+    throw SocketException ( "Could not recv file." );
+  }
+}
+
+void ServerSocket::sendFile(const std::string s ) const
+{
+  if ( ! Socket::sendF ( s ) )
+  {
+    throw SocketException ( "Could not send file." );
+  }
+}

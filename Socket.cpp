@@ -150,7 +150,7 @@ int Socket::recv ( std::string& s ) const
     }
 }
 
-bool Socket::getF(const std::string) const
+bool Socket::recvF( const std::string s ) const
 {
   //тут мы получаем имя файла который хочет получить тот кто спрашивает
   //мы передаем сюда имя файла, 
@@ -159,7 +159,7 @@ bool Socket::getF(const std::string) const
     return false;
 }
 
-bool Socket::sendF() const
+bool Socket::sendF( const std::string s ) const
 {
     return false;
 }

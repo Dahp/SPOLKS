@@ -16,7 +16,10 @@ class ClientSocket : private Socket
   const ClientSocket& operator << ( const std::string& ) const;
   const ClientSocket& operator >> ( std::string& ) const;
 
-  void getFile (std::string& ) const;
+  //work with files
+  void recvFile ( const std::string& ) const; //и что предавать тут строку или ссылку на строку
+  void sendFile ( const std::string& ) const;// аналогично, что передавать
+
 
 };
 
