@@ -41,7 +41,7 @@ class Socket
   bool sendF ( const std::string ) const;
   bool recvF ( const std::string ) const;//bool?
 
-  //Work with file
+  //Work with file and check
   bool checkF (const std::string ) const;
   bool readFfile ( const std::string,  char* ) const;
 
