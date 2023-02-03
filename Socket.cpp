@@ -7,6 +7,7 @@
 #include <string.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <fstream>
 
 
 
@@ -161,9 +162,23 @@ bool Socket::recvF( const std::string s ) const
   таким же именем + (n) и расширением или как вариант кидаем исключение что такой файл уже есть
   и начнаем принимать и писать в файл 
   в конце закрываем файл
-  
   */
+    char buf [ MAXRECV ];
+
+
     return false;
+}
+
+bool Socket::checkF(const std::string s) const
+{
+  std::ifstream fileForCheck;
+  fileForCheck.open(s);
+  if (fileForCheck.is_open())
+  {
+    fileForCheck.close();
+    return true;
+  }
+  return false;
 }
 
 bool Socket::sendF( const std::string s ) const
@@ -173,6 +188,8 @@ bool Socket::sendF( const std::string s ) const
     потом когда нашли файл, открываем егоои начинаем читать его по немногу в буфер
     и начинем отправлять !(размер буфера должен быть равен размеру буфера сокета для отправки и чтения)  
   */
+    if( !checkF(s)) return false;
+    char buf [ MAXRECV ];
 
     return false;
 }
