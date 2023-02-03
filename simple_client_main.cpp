@@ -10,7 +10,7 @@ int main ( int argc, int argv[] )
     {
 
           ClientSocket client_socket ( "ip to", 30000 );
-          std::string reply;
+          std::string reply = "", nameFile = "";
 
       try
       {
@@ -23,7 +23,17 @@ int main ( int argc, int argv[] )
             client_socket << tmp;  
             client_socket >> reply;
             std::cout << reply << std::endl;
-          }else{
+          } else if (tmp == "download")
+          {
+            std::cout << "Input name of file: ";
+            std::cin >> nameFile;
+            client_socket.recvFile(nameFile);
+          } else if (tmp == "upload")
+          {
+            std::cout << "Input name of file: ";
+            std::cin >> nameFile;
+            client_socket.sendFile(nameFile);
+          } else{
             client_socket << tmp;//отправляем
             client_socket >> reply;//получаем
             std::cout << reply << std::endl;
