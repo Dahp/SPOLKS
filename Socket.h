@@ -43,7 +43,7 @@ class Socket
 
   //Work with file
   bool checkF (const std::string ) const;
-  bool readFfile ( const std::string ) const;
+  bool readFfile ( const std::string,  char* ) const;
 
 
   void set_non_blocking ( const bool );
