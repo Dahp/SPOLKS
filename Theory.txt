@@ -1,7 +1,1 @@
----удалить файлы из индекса
-    git reset HEAD file1.cpp file2.h .....
----запушить все ветки и теги сразу, соответственно
-    git push origin --all
-    git push origin --tags
----получить все ветки
-    git fetch origin -all
+fhdsajkfhsdjfhsjk

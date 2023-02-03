@@ -176,6 +176,7 @@ bool Socket::recvF( const std::string s ) const
       {
          rcv = ::recv ( m_sock, buf, MAXRECV, 0 );
          file << buf;
+         std::cout << "recv";
       } while (rcv);
       file.close();
       return true;      
