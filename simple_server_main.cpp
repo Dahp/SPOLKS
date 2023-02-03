@@ -15,7 +15,7 @@ int main ( int argc, int argv[] )
       // Create the socket
       ServerSocket server_socket ( 30000 );
 	  std::string data = "", nameFile = "";
-      while ( true )
+	  while ( true )
 	{
 	  ServerSocket new_sock;
 	  server_socket.accept ( new_sock );

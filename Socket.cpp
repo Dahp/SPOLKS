@@ -164,9 +164,22 @@ bool Socket::recvF( const std::string s ) const
   в конце закрываем файл
   */
     char buf [ MAXRECV ];
-    
-
-
+    memset(buf, '!', MAXRECV);
+    //if( !readFfile(s, buf)) return false;//спросить как оно работало бы 
+    if( !checkF(s)) return false;
+    std::ofstream file;
+    file.open(s);
+    if(file.is_open())
+    {
+      int rcv = 0;
+      do 
+      {
+         rcv = ::recv ( m_sock, buf, MAXRECV, 0 );
+         file << buf;
+      } while (rcv);
+      file.close();
+      return true;      
+    }
     return false;
 }
 
@@ -191,14 +204,25 @@ bool Socket::sendF( const std::string s ) const
 {//сервер\клиент отправляет файл
   //алгорит
   /*сначала получаем имя файла и проверяем файл на наличие, если нет, то кидаем исключение
-    потом когда нашли файл, открываем егоои начинаем читать его по немногу в буфер
+    потом когда нашли файл, открываем егоои начинаем читать его понемногу в буфер
     и начинем отправлять !(размер буфера должен быть равен размеру буфера сокета для отправки и чтения)  
   */
     char buf [ MAXRECV ];
     memset(buf, '@', MAXRECV);
     //if( !readFfile(s, buf)) return false;//спросить как оно работало бы 
     if( !checkF(s)) return false;
-    std::ifstream file (s);
+    std::ifstream file (s, std::ios_base::in | std::ios_base::binary);
+    if(file.is_open())
+    {
+      while (!file.eof())
+      {
+        file.getline(buf, MAXRECV);
+        send(buf);
+      }
+      file.close();
+      return true;      
+    }
+
 
     return false;
 }
