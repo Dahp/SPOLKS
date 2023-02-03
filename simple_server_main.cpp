@@ -13,12 +13,12 @@ int main ( int argc, int argv[] )
   try
     {
       // Create the socket
-      ServerSocket server ( 30000 );
+      ServerSocket server_socket ( 30000 );
 	  std::string data = "", nameFile = "";
       while ( true )
 	{
 	  ServerSocket new_sock;
-	  server.accept ( new_sock );
+	  server_socket.accept ( new_sock );
 
 	  try
 	    {
@@ -36,12 +36,12 @@ int main ( int argc, int argv[] )
 				{
 					std::cout << "Input name of file: ";
 					std::cin >> nameFile;
-					server.sendFile(nameFile);
+					server_socket.sendFile(nameFile);
 				} else if (data == "upload")
 				{
 					std::cout << "Input name of file: ";
 					std::cin >> nameFile;
-					server.recvFile(nameFile);
+					server_socket.recvFile(nameFile);
 				} else if( data == "echo")
 				{	
 					//доделать этот блок
