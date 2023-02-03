@@ -41,8 +41,9 @@ class Socket
   bool sendF ( const std::string ) const;
   bool recvF ( const std::string ) const;//bool?
 
-  //Checks
+  //Work with file
   bool checkF (const std::string ) const;
+  bool readFfile ( const std::string ) const;
 
 
   void set_non_blocking ( const bool );

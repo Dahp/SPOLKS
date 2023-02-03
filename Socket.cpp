@@ -164,6 +164,7 @@ bool Socket::recvF( const std::string s ) const
   в конце закрываем файл
   */
     char buf [ MAXRECV ];
+    
 
 
     return false;
@@ -181,6 +182,11 @@ bool Socket::checkF(const std::string s) const
   return false;
 }
 
+bool Socket::readFfile(const std::string s) const
+{
+  if( !checkF(s)) return false;
+}
+
 bool Socket::sendF( const std::string s ) const
 {//сервер\клиент отправляет файл
   //алгорит
@@ -188,8 +194,10 @@ bool Socket::sendF( const std::string s ) const
     потом когда нашли файл, открываем егоои начинаем читать его по немногу в буфер
     и начинем отправлять !(размер буфера должен быть равен размеру буфера сокета для отправки и чтения)  
   */
-    if( !checkF(s)) return false;
+ if( !readFfile(s)) return false;
     char buf [ MAXRECV ];
+    memset(buf, '@', MAXRECV);
+
 
     return false;
 }
