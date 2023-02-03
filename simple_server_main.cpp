@@ -14,7 +14,7 @@ int main ( int argc, int argv[] )
     {
       // Create the socket
       ServerSocket server ( 30000 );
-	  std::string data = "";
+	  std::string data = "", nameFile = "";
       while ( true )
 	{
 	  ServerSocket new_sock;
@@ -32,12 +32,16 @@ int main ( int argc, int argv[] )
 					time_t now = time(0);
 					char* dt = ctime(&now);
 					new_sock << dt;
-					
-				} else if (data == "file")
+				} else if (data == "download")
 				{
-					//отправляем по факту строки и пишем в файл
-					//для этого написать надо функцию
-					
+					std::cout << "Input name of file: ";
+					std::cin >> nameFile;
+					server.sendFile(nameFile);
+				} else if (data == "upload")
+				{
+					std::cout << "Input name of file: ";
+					std::cin >> nameFile;
+					server.recvFile(nameFile);
 				} else if( data == "echo")
 				{	
 					//доделать этот блок
