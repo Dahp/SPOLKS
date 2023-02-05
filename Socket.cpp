@@ -190,18 +190,17 @@ bool Socket::checkF(const std::string s) const
   if (fileForCheck.is_open())
   {
     fileForCheck.close();
-    std::cout << "(chechF) file found!\n";//потом в логи писать
+    std::cout << "chechFile() file found!\n";//потом в логи писать
     return true;
   }
-  std::cout << "checkfile() error\n";//в логи писать
+  std::cout << "checkFile() error\n";//в логи писать
   return false;
 }
 
 bool Socket::sendF( const std::string s ) const
-{//сервер\клиент отправляет файл
-  //алгорит
+{
   /*сначала получаем имя файла и проверяем файл на наличие, если нет, то кидаем исключение
-    потом когда нашли файл, открываем егоои начинаем читать его понемногу в буфер
+    потом когда нашли файл, открываем его и начинаем читать его понемногу в буфер
     и начинем отправлять !(размер буфера должен быть равен размеру буфера сокета для отправки и чтения)  
   */
   std::cout << "func sendF\n";//для отладки
