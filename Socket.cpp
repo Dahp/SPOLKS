@@ -52,11 +52,10 @@ bool Socket::create()
 
 bool Socket::bind ( const int port )
 {
-
   if ( ! is_valid() )
-    {
+  {
       return false;
-    }
+  }
 
 
 
@@ -67,12 +66,11 @@ bool Socket::bind ( const int port )
   int bind_return = ::bind ( m_sock,
 			     ( struct sockaddr * ) &m_addr,
 			     sizeof ( m_addr ) );
-
-
+  
   if ( bind_return == -1 )
-    {
+  {
       return false;
-    }
+  }
 
   return true;
 }
@@ -81,17 +79,17 @@ bool Socket::bind ( const int port )
 bool Socket::listen() const
 {
   if ( ! is_valid() )
-    {
+  {
       return false;
-    }
+  }
 
   int listen_return = ::listen ( m_sock, MAXCONNECTIONS );
 
 
   if ( listen_return == -1 )
-    {
+  {
       return false;
-    }
+  }
 
   return true;
 }
@@ -116,13 +114,13 @@ bool Socket::send ( const std::string s ) const
 {
   int status = ::send ( m_sock, s.c_str(), s.size(), MSG_NOSIGNAL );
   if ( status == -1 )
-    {
+  {
       return false;
-    }
+  }
   else
-    {
+  {
       return true;
-    }
+  }
 }
 
 int Socket::recv ( std::string& s ) const
@@ -136,19 +134,19 @@ int Socket::recv ( std::string& s ) const
   int status = ::recv ( m_sock, buf, MAXRECV, 0 );
 
   if ( status == -1 )
-    {
+  {
       std::cout << "status == -1   errno == " << errno << "  in Socket::recv\n";
       return 0;
-    }
+  }
   else if ( status == 0 )
-    {
+  {
       return 0;
-    }
+  }
   else
-    {
+  {
       s = buf;
       return status;
-    }
+  }
 }
 
 bool Socket::recvF( const std::string s ) const
