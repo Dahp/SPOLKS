@@ -163,25 +163,29 @@ bool Socket::recvF( const std::string s ) const
   и начнаем принимать и писать в файл 
   в конце закрываем файл
   */
-    char buf [ MAXRECV ];
-    memset(buf, '!', MAXRECV);
-    //if( !readFfile(s, buf)) return false;//спросить как оно работало бы 
-    if( !checkF(s)) return false;
-    std::ofstream file;
-    file.open(s);
-    if(file.is_open())
+  std::cout << "wait file for rcv\n";//для отладки
+  char buf [ MAXRECV ];
+  memset(buf, '!', MAXRECV);
+  //if( !checkF(s)) return false;
+
+  std::ofstream file;
+  file.open(s);
+  std::cout << "file open\n";
+  if(file.is_open())
+  {
+    int rcv = 0;
+    do 
     {
-      int rcv = 0;
-      do 
-      {
-         rcv = ::recv ( m_sock, buf, MAXRECV, 0 );
-         file << buf;
-         std::cout << "recv";
-      } while (rcv);
-      file.close();
-      return true;      
-    }
-    return false;
+        rcv = ::recv ( m_sock, buf, MAXRECV, 0 );
+        std::cout << "recive rcv (int(-1 or 0)): " << rcv << std::endl;//для отладки
+        file << buf;
+        std::cout << "buf: " << buf << std::endl;//для отладки
+    } while (rcv != -1 /*&& rcv != 0*/);
+    file.close();
+    return true;      
+  }
+  std::cout << "recvF() error\n";
+  return false;
 }
 
 bool Socket::checkF(const std::string s) const
@@ -191,14 +195,11 @@ bool Socket::checkF(const std::string s) const
   if (fileForCheck.is_open())
   {
     fileForCheck.close();
+    std::cout << "(chechF) file found!\n";//потом в логи писать
     return true;
   }
+  std::cout << "checkfile() error\n";//в логи писать
   return false;
-}
-
-bool Socket::readFfile(const std::string s, char* c) const
-{
-  if( !checkF(s)) return false;
 }
 
 bool Socket::sendF( const std::string s ) const
@@ -208,24 +209,34 @@ bool Socket::sendF( const std::string s ) const
     потом когда нашли файл, открываем егоои начинаем читать его понемногу в буфер
     и начинем отправлять !(размер буфера должен быть равен размеру буфера сокета для отправки и чтения)  
   */
-    char buf [ MAXRECV ];
-    memset(buf, '@', MAXRECV);
-    //if( !readFfile(s, buf)) return false;//спросить как оно работало бы 
-    if( !checkF(s)) return false;
-    std::ifstream file (s, std::ios_base::in | std::ios_base::binary);
-    if(file.is_open())
+  std::cout << "func sendF\n";//для отладки
+  char buf [ MAXRECV ];
+  memset(buf, '@', MAXRECV);
+  //if( !readFfile(s, buf)) return false;//спросить как оно работало бы 
+  if( !checkF(s)) return false;
+  
+  std::ifstream file (s, std::ios_base::in | std::ios_base::binary);
+  if(file.is_open())
+  {
+    std::cout << "file open\n";//потом в логи писать
+    int i = 0;//временная переменная для отладки
+    while (!file.eof())
     {
-      while (!file.eof())
+      std::cout << "readinf from a file: " << i << std::endl;//для отладки
+      file.getline(buf, MAXRECV);
+      if(send(buf)) continue;
+      else
       {
-        file.getline(buf, MAXRECV);
-        send(buf);
+        file.close();
+        std::cout << "sending problem send() == false\n";
+        return false;
       }
-      file.close();
-      return true;      
     }
-
-
-    return false;
+    file.close();
+    return true;      
+  }
+  std::cout << "senf() error\n";
+  return false;
 }
 
 

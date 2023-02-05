@@ -37,13 +37,12 @@ class Socket
   bool send ( const std::string ) const;//(2) а тут передаем строку
   int recv ( std::string& ) const;//(1)почему тут передаем ссылку 
 
-  //File transmission
+  //File transmission (файлы)
   bool sendF ( const std::string ) const;
-  bool recvF ( const std::string ) const;//bool?
+  bool recvF ( const std::string ) const;
 
   //Work with file and check
   bool checkF (const std::string ) const;
-  bool readFfile ( const std::string,  char* ) const;
 
 
   void set_non_blocking ( const bool );
