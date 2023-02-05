@@ -29,8 +29,7 @@ bool Socket::create()
 {
   m_sock = socket ( AF_INET,SOCK_STREAM, 0 );
 
-  if ( ! is_valid() )
-    return false;
+  if ( ! is_valid() ) return false;
 
 
   // TIME_WAIT - argh
@@ -54,7 +53,7 @@ bool Socket::bind ( const int port )
 {
   if ( ! is_valid() )
   {
-      return false;
+    return false;
   }
 
 
@@ -69,7 +68,7 @@ bool Socket::bind ( const int port )
   
   if ( bind_return == -1 )
   {
-      return false;
+    return false;
   }
 
   return true;
@@ -80,7 +79,7 @@ bool Socket::listen() const
 {
   if ( ! is_valid() )
   {
-      return false;
+    return false;
   }
 
   int listen_return = ::listen ( m_sock, MAXCONNECTIONS );
@@ -88,7 +87,7 @@ bool Socket::listen() const
 
   if ( listen_return == -1 )
   {
-      return false;
+    return false;
   }
 
   return true;
@@ -115,11 +114,11 @@ bool Socket::send ( const std::string s ) const
   int status = ::send ( m_sock, s.c_str(), s.size(), MSG_NOSIGNAL );
   if ( status == -1 )
   {
-      return false;
+    return false;
   }
   else
   {
-      return true;
+    return true;
   }
 }
 
@@ -226,7 +225,7 @@ bool Socket::sendF( const std::string s ) const
       else
       {
         file.close();
-        std::cout << "sending problem send() == false\n";
+        std::cout << "sending, problem send() == false\n";
         return false;
       }
     }
