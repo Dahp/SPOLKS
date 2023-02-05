@@ -56,8 +56,6 @@ bool Socket::bind ( const int port )
     return false;
   }
 
-
-
   m_addr.sin_family = AF_INET;
   m_addr.sin_addr.s_addr = INADDR_ANY;
   m_addr.sin_port = htons ( port );
