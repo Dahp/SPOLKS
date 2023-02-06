@@ -34,6 +34,7 @@ int main ( int argc, int argv[] )
 					} else if (data == "download")//тут скачивают с сервера, те сервер ищет и отправляет
 					{
 						new_sock >> data;
+						std::cout << "downloading\n";
 						nameFile = data;
 						std::cout << "file name: " << data << std::endl;//для отладки
 						server_socket.sendFile(nameFile);
