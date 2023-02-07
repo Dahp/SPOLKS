@@ -164,7 +164,8 @@ bool Socket::recvF( const std::string s ) const
   */
   std::cout << "wait file for rcv\n";//для отладки
   char buf [ MAXRECV ];
-  int len = 0;
+  int len = 
+  +0;
   memset(buf, '!', MAXRECV);
   //if( !checkF(s)) return false;
 
