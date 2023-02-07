@@ -16,7 +16,8 @@
 
 const int MAXHOSTNAME = 200;
 const int MAXCONNECTIONS = 5;
-const int MAXRECV = 50;//65535
+const int MAXRECV = 25;//65535
+
 class Socket
 {
  public:
@@ -37,11 +38,8 @@ class Socket
   int recv ( std::string& ) const;//(1)почему тут передаем ссылку 
 
   //File transmission (файлы)
-  bool sendF ( const std::string ) const;//override for send
+  bool sendF ( const std::string& ) const;//override for send
   bool recvF ( const std::string& ) const;//override for recv
-
-  //Work with file and check
-  bool checkF (const std::string& ) const;
 
 
   void set_non_blocking ( const bool );

@@ -4,7 +4,7 @@
 #include <string>
 #include <ctime>
 
-int main ( int argc, int argv[] )
+int main ()
 {
   try
     {
@@ -18,12 +18,12 @@ int main ( int argc, int argv[] )
           std::cin >> request;
           if (request == "download")//++++++++++
           {
-            std::cout << "download func\n";//для отладки
             client_socket << request;
             std::cout << "Input name of file: ";
             std::cin >> nameFile;
             client_socket << nameFile;
             client_socket.recvFile(nameFile);//+++++++++++++
+            std::cout << "--------------------@";
           } else if (request == "upload")
           {
             std::cout << "Input name of file: ";

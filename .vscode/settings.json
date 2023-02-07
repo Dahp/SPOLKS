@@ -65,6 +65,18 @@
         "variant": "cpp",
         "compare": "cpp",
         "concepts": "cpp",
-        "numbers": "cpp"
+        "numbers": "cpp",
+        "csetjmp": "cpp",
+        "any": "cpp",
+        "cfenv": "cpp",
+        "charconv": "cpp",
+        "cuchar": "cpp",
+        "forward_list": "cpp",
+        "unordered_set": "cpp",
+        "regex": "cpp",
+        "scoped_allocator": "cpp",
+        "shared_mutex": "cpp",
+        "valarray": "cpp",
+        "*.ipp": "cpp"
     }
 }

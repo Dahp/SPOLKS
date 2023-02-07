@@ -6,7 +6,7 @@
 #include <ctime>
 #include<algorithm>
 
-int main ( int argc, int argv[] )
+int main ()
 {
 	std::cout << "running....\n";
 	try
@@ -34,10 +34,11 @@ int main ( int argc, int argv[] )
 					} else if (data == "download")//тут скачивают с сервера, те сервер ищет и отправляет
 					{
 						new_sock >> data;
-						std::cout << "downloading\n";
+						std::cout << "start downloading\n";
 						nameFile = data;
-						std::cout << "file name: " << data << std::endl;//для отладки
+						std::cout << "file name: " << data << std::endl;
 						server_socket.sendFile(nameFile);
+						std::cout << "--------------------@\n";
 					} else if (data == "upload")
 					{
 						server_socket.recvFile(nameFile);

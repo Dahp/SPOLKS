@@ -33,8 +33,6 @@ bool Socket::create()
   m_sock = socket ( AF_INET,SOCK_STREAM, 0 );
 
   if ( ! is_valid() ) return false;
-
-
   // TIME_WAIT - argh
   int on = 1;
 
@@ -44,10 +42,7 @@ bool Socket::create()
     //манипулирует флагами, установленными на сокете.
     return false;
   }
-
-
   return true;
-
 }
 
 
@@ -75,7 +70,6 @@ bool Socket::bind ( const int port )
   return true;
 }
 
-
 bool Socket::listen() const
 {
   if ( ! is_valid() )
@@ -94,7 +88,6 @@ bool Socket::listen() const
   return true;
 }
 
-
 bool Socket::accept ( Socket& new_socket ) const
 {
   int addr_length = sizeof ( m_addr );
@@ -109,9 +102,10 @@ bool Socket::accept ( Socket& new_socket ) const
   }
 }
 
-
 bool Socket::send ( const std::string s ) const
 {
+  std::cout << "into send(): " << s << "\n";
+  std::cout << "into send(): s.c_str(): " << s.c_str() << "\n";
   int status = ::send ( m_sock, s.c_str(), s.size(), MSG_NOSIGNAL );
   if ( status == -1 )
   {
@@ -126,238 +120,83 @@ bool Socket::send ( const std::string s ) const
 int Socket::recv ( std::string& s ) const
 {
   char buf [ MAXRECV + 1 ];
-
   s = "";
-
   memset ( buf, 0, MAXRECV + 1 );
-
   int status = ::recv ( m_sock, buf, MAXRECV, 0 );
-
   if ( status == -1 )
   {
       std::cout << "status == -1   errno == " << errno << "  in Socket::recv\n";
       return 0;
-  }
-  else if ( status == 0 )
+  }else if ( status == 0 )
   {
-      return 0;
+    return 0;
   }
   else
   {
-      s = buf;
-      return status;
+    s = buf;
+    return status;
   }
 }
 
 bool Socket::recvF( const std::string& s ) const
-{ 
-  /*
-  сервер\клиент принимает файл
-  тут мы получаем имя файла который хочет получить тот кто спрашивает
-  мы передаем сюда имя файла, 
-  во ттут вопрос: мне надо вызывать функцию recv и тут написать свою функцию
-  аналогично recv 
-  получаем имя файлы и проверяем есть ли такой файл уже, если есть то мы создаем с 
-  таким же именем + (n) и расширением или как вариант кидаем исключение что такой файл уже есть
-  и начнаем принимать и писать в файл 
-  в конце закрываем файл
-  */
- std::cout << "[+] into recvF()\n";//log
- std::cout << "[?] string s: " << s << std::endl;//log
-
- std::ofstream writeF;//ofstream - allows to WRITE contents to a file
- writeF.open(s, std::ios_base::out);
- std::cout << "[+] into recvF(): file created\n";//log
- writeF.close();
-
- std::cout << "[+] into recvF(): file closed\n";//log
- if(!checkF(s)) return false;
- char buf [MAXRECV + 1];
- int len = 0;
- memset ( buf, 0, MAXRECV + 1 );
-
- writeF.open(s, std::ios_base::in |std::ios_base::app);
- std::cout << "[+] into recvF(): file open\n";//log
- 
- int status = ::recv ( m_sock, buf, MAXRECV, 0 );
- std::cout << "[+] into recvF(): buf(1) \n-----------------\n" << buf << "-----------\n";
- do
- {
-  len = ::recv(m_sock, (char*)buf, sizeof(buf), MSG_DONTWAIT);
-   std::cout << "[+] into recvF(): buf(other) \n-----------------\n" << buf << "-----------\n";
-  if (len < 0)
-  {
-    std::cout << "[-] recvF(): error recv (do...while)\n";//log
+{
+  std::ofstream writeF;//ofstream - allows to WRITE contents to a file
+  writeF.open(s, std::ios_base::binary |std::ios_base::app);
+  if(!writeF.is_open())//retrun 1 if file found and opened
     return false;
-  }
 
-  if (strcmp(buf, MEOF) == 0)
+  char buf [MAXRECV + 1];
+  int len = 0;
+  memset ( buf, 0, MAXRECV + 1 );
+  std::string str = "";
+  int status = recv (str);
+  do
   {
-    std::cout << "[+] recvF(): find EOF\n";//log
-    break;
-  }
-    
-  std::cout << "[+] recvF(): write in file, num of sym: " << len << std::endl;//log
-  writeF.write(buf, len);  
- } while ( len!=0 );
+    len = recv(str);
+    if (len < 0)
+    {
+      return false;
+    }
 
- std::cout << "[+] recvF(): end write in file\n";
- return true;
- 
-  // std::cout << "wait file for rcv\n";//для отладки
-  // char buf [ MAXRECV ];
-  // int len = 
-  // +0;
-  // memset(buf, '!', MAXRECV);
-  // //if( !checkF(s)) return false;
-  // std::ofstream file;
-  // file.open(s, std::ios_base::out);
-  // if (!file.is_open())  return false;
-  // do
-  // {
-  //   len = ::recv ( m_sock, buf, MAXRECV, 0 );
-  //   if (len < 0)
-  //   {
-  //     std::cout << "recv file err\n";
-  //     return false;
-  //   }else if (strcmp(buf, MEOF) == 0)
-  //   {
-  //     break;
-  //   }
-  //   std::cout << "write into file\n";
-  //   file.write(buf, len);
-  // } while (len != 0);
-  // std::cout << "complete recv file\n";
-  // return true;
-
-  // file.open(s);
-  // std::cout << "file open\n";
-  // if(file.is_open())
-  // {
-  //   int rcv = 0;
-  //   do 
-  //   {
-  //       rcv = ::recv ( m_sock, buf, MAXRECV, 0 );
-  //       std::cout << "recive rcv (int(-1 or 0)): " << rcv << std::endl;//для отладки
-  //       file << buf;
-  //       std::cout << "buf: " << buf << std::endl;//для отладки
-  //   } while (rcv != -1 /*&& rcv != 0*/);
-  //   file.close();
-  //   return true;      
-  // }
-  // std::cout << "recvF() error\n";
-  // return false;
+    if (strcmp(buf, MEOF) == 0)
+    {
+      break;
+    }
+    writeF.write(buf, len);  
+  } while ( len!=0 );
+  return true;
 }
 
 
 
-bool Socket::sendF( const std::string s ) const
+bool Socket::sendF( const std::string& s ) const
 {
-  /*сначала получаем имя файла и проверяем файл на наличие, если нет, то кидаем исключение
-    потом когда нашли файл, открываем его и начинаем читать его понемногу в буфер
-    и начинем отправлять !(размер буфера должен быть равен размеру буфера сокета для отправки и чтения)  
-  */
- char buf[MAXRECV];
- int sended = 0, readed = 0;
+  char buf[MAXRECV - 1 ];
+  memset ( buf, 0, MAXRECV );
 
+  int sended = 0, readed = 0;
+  std::ifstream readF;
+  readF.open(s, std::ios_base::binary | std::ios_base::out | std::ios_base::in);
 
-
- std::ifstream readF;
- readF.open(s, std::ios_base::out | std::ios_base::in);
- std::cout << "[+] into sendF(): file created\n";//log
-
- if(!readF.is_open())//retrun 1 if file found and opened
- {
-  std::cout << "[-] sendF(): is_open() true\n";//log
-  return false;
- }
-
- readF.read(buf, sizeof(buf));
-
- std::cout << "[+] readF(): read from file:\n----------------\n" << buf << "\n-------------\n"; //log
- while ((readed = readF.gcount()) != 0) 
- {
-  std::cout << "[+] readF(): into while..., gcount() = " << readF.gcount() << "\n";
-  //sended = ::send(m_sock, (char*)buf, readed, 0);
-  sended = send(buf); //v2
-  std::cout << "[+] readF(): send file, sended: " << sended << "\n";//log
-  if (sended < 0)
-  {
-    std::cout << "[-] sendF(): invalid read\n";//log
+  if(!readF.is_open())//retrun 1 if file found and opened
     return false;
-  }
-  readF.read(buf, sizeof(buf));  
- }
- std::cout << "[+] sendF(): before sleep(1)\n";
- sleep(1);
- std::cout << "[+] sendF(): sleep(1)\n";//log
- ::send(m_sock, (char*)MEOF, sizeof(MEOF), 0);
-std::cout << "[+] sendF(): sended EOF and return true\n";//log
- return true;
- 
 
-  // std::cout << "func sendF\n";//для отладки
-  // char buf [ MAXRECV ];
-  // int sended = 0, readed = 0;
-  // memset(buf, '@', MAXRECV);
-  // //if( !readFfile(s, buf)) return false;//спросить как оно работало бы 
-  // if( checkF(s) == false) return false;
-  // std::cout << "after checkF()\n";
-  // std::ifstream file (s, std::ios_base::in | std::ios_base::app/*| std::ios_base::binary*/);
-  // std::cout << "file create\n";
-  // file.read(buf, sizeof(buf));
-  // std::cout << "file readed\n";
-  // while ((readed = file.gcount()) != 0)
-  // {
-  //   int sended = ::send( m_sock, buf, readed, 0 );
-  //   std::cout << "sending\n";
-  //   if (sended < 0)
-  //   {
-  //     std::cout << "sending err\n";
-  //     return false;
-  //   }
-  //   file.read(buf, sizeof(buf));    
-  // }
-  // sleep(1);
-  // ::send(m_sock, (char*)MEOF, sizeof(MEOF), 0);
-  // return true;  
-  
-  // if(file.is_open())
-  // {
-  //   std::cout << "file open\n";//потом в логи писать
-  //   int i = 0;//временная переменная для отладки
-  //   while (!file.eof())
-  //   {
-  //     std::cout << "readinf from a file: " << i << std::endl;//для отладки
-  //     file.getline(buf, MAXRECV);
-  //     if(send(buf)) continue;
-  //     else
-  //     {
-  //       file.close();
-  //       std::cout << "sending, problem send() == false\n";
-  //       return false;
-  //     }
-  //   }
-  //   file.close();
-  //   return true;      
-  // }
-  //std::cout << "senf() error\n";
-  //return false;
-}
 
-bool Socket::checkF(const std::string& s) const//потом передавать сюда не только имя файла, но и ссылку на поток чтения или типо того
-{
-  std::ifstream fileForCheck;//ifstream - allows to READ from the contents of a file
-  fileForCheck.open(s, std::ios_base::in);
-  std::cout << "checkF(), recved string name - s: " << s << std::endl;//log
-  if (fileForCheck.is_open())
+  readF.read(buf, sizeof(buf));
+  while ((readed = readF.gcount()) != 0) 
   {
-    fileForCheck.close();
-    std::cout << "[+] chechFile(): file found!\n";//log
-    return true;
+    //sended = ::send(m_sock, (char*)buf, readed, 0);
+    sended = send(buf); //v2
+    if (sended < 0)
+    {
+      return false;
+    }
+    readF.read(buf, sizeof(buf));
   }
-  std::cout << "[-] checkFile(): Not found!\n";//log
-  return false;
+  sleep(1);
+  //::send(m_sock, (char*)MEOF, sizeof(MEOF), 0);
+  send(MEOF);
+  return true;
 }
 
 
