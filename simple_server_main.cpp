@@ -12,7 +12,7 @@ int main ()
 	try
 	{
 		// Create the socket
-		ServerSocket server_socket ( 30000 );
+		ServerSocket server_socket ( 30000 );//для чего дважды создавать объект одно и того же класса
 		std::string data = "", nameFile = "";
 		while ( true )
 		{
@@ -22,8 +22,8 @@ int main ()
 			{
 				while ( true )
 				{
+					server_socket >> data;
 					new_sock >> data;
-
 					if(data == "ping"){
 						new_sock << "pong";
 					} else if(data == "time")

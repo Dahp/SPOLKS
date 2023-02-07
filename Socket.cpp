@@ -13,13 +13,11 @@
 
 #define MEOF "EOF"
 
-
+//для чего инициа
 Socket::Socket() :
   m_sock ( -1 )
 {
-
   memset ( &m_addr, 0, sizeof ( m_addr ) ); 
-
 }
 
 Socket::~Socket()
@@ -91,6 +89,7 @@ bool Socket::listen() const
 bool Socket::accept ( Socket& new_socket ) const
 {
   int addr_length = sizeof ( m_addr );
+  
   new_socket.m_sock = ::accept ( m_sock, ( sockaddr * ) &m_addr, 
                                 ( socklen_t * ) &addr_length );
 
@@ -104,8 +103,6 @@ bool Socket::accept ( Socket& new_socket ) const
 
 bool Socket::send ( const std::string s ) const
 {
-  std::cout << "into send(): " << s << "\n";
-  std::cout << "into send(): s.c_str(): " << s.c_str() << "\n";
   int status = ::send ( m_sock, s.c_str(), s.size(), MSG_NOSIGNAL );
   if ( status == -1 )
   {
@@ -138,6 +135,8 @@ int Socket::recv ( std::string& s ) const
   }
 }
 
+
+
 bool Socket::recvF( const std::string& s ) const
 {
   std::ofstream writeF;//ofstream - allows to WRITE contents to a file
@@ -166,8 +165,6 @@ bool Socket::recvF( const std::string& s ) const
   } while ( len!=0 );
   return true;
 }
-
-
 
 bool Socket::sendF( const std::string& s ) const
 {
