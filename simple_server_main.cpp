@@ -22,7 +22,6 @@ int main ()
 			{
 				while ( true )
 				{
-					server_socket >> data;
 					new_sock >> data;
 					if(data == "ping"){
 						new_sock << "pong";
