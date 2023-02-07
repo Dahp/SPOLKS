@@ -176,14 +176,15 @@ bool Socket::recvF( const std::string& s ) const
  int len = 0;
  memset ( buf, 0, MAXRECV + 1 );
 
- writeF.open(s, std::ios_base::binary| std::ios_base::in |std::ios_base::app);
- std::cout << "[+] into recvF(): file open like binary\n";//log
+ writeF.open(s, std::ios_base::in |std::ios_base::app);
+ std::cout << "[+] into recvF(): file open\n";//log
  
  int status = ::recv ( m_sock, buf, MAXRECV, 0 );
-
+ std::cout << "[+] into recvF(): buf(1) \n-----------------\n" << buf << "-----------\n";
  do
  {
   len = ::recv(m_sock, (char*)buf, sizeof(buf), MSG_DONTWAIT);
+   std::cout << "[+] into recvF(): buf(other) \n-----------------\n" << buf << "-----------\n";
   if (len < 0)
   {
     std::cout << "[-] recvF(): error recv (do...while)\n";//log
@@ -200,7 +201,7 @@ bool Socket::recvF( const std::string& s ) const
   writeF.write(buf, len);  
  } while ( len!=0 );
 
- std::cout << "[+] recvF(): end wtite in file\n";
+ std::cout << "[+] recvF(): end write in file\n";
  return true;
  
   // std::cout << "wait file for rcv\n";//для отладки
@@ -259,21 +260,27 @@ bool Socket::sendF( const std::string s ) const
  char buf[MAXRECV];
  int sended = 0, readed = 0;
 
- std::ifstream readF;
- readF.open(s, std::ios_base::binary | std::ios_base::out | std::ios_base::in);
- std::cout << "[+] into sendF(): file created\n";//log
- readF.close();
 
- if(!readF.is_open())//retrun 1 if filed found and opened
+
+ std::ifstream readF;
+ readF.open(s, std::ios_base::out | std::ios_base::in);
+ std::cout << "[+] into sendF(): file created\n";//log
+
+ if(!readF.is_open())//retrun 1 if file found and opened
  {
   std::cout << "[-] sendF(): is_open() true\n";//log
   return false;
  }
 
  readF.read(buf, sizeof(buf));
+
+ std::cout << "[+] readF(): read from file:\n----------------\n" << buf << "\n-------------\n"; //log
  while ((readed = readF.gcount()) != 0) 
  {
-  sended = ::send(m_sock, (char*)buf, readed, 0);
+  std::cout << "[+] readF(): into while..., gcount() = " << readF.gcount() << "\n";
+  //sended = ::send(m_sock, (char*)buf, readed, 0);
+  sended = send(buf); //v2
+  std::cout << "[+] readF(): send file, sended: " << sended << "\n";//log
   if (sended < 0)
   {
     std::cout << "[-] sendF(): invalid read\n";//log
@@ -281,13 +288,14 @@ bool Socket::sendF( const std::string s ) const
   }
   readF.read(buf, sizeof(buf));  
  }
+ std::cout << "[+] sendF(): before sleep(1)\n";
  sleep(1);
  std::cout << "[+] sendF(): sleep(1)\n";//log
  ::send(m_sock, (char*)MEOF, sizeof(MEOF), 0);
 std::cout << "[+] sendF(): sended EOF and return true\n";//log
  return true;
  
- 
+
   // std::cout << "func sendF\n";//для отладки
   // char buf [ MAXRECV ];
   // int sended = 0, readed = 0;
