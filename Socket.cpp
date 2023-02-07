@@ -182,8 +182,8 @@ bool Socket::sendF( const std::string& s ) const
   readF.read(buf, sizeof(buf));
   while ((readed = readF.gcount()) != 0) 
   {
-    //sended = ::send(m_sock, (char*)buf, readed, 0);
-    sended = send(buf); //v2
+    sended = ::send(m_sock, (char*)buf, readed, 0);
+    //sended = send(buf); //v2
     if (sended < 0)
     {
       return false;
