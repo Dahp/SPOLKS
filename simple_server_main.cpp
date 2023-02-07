@@ -36,7 +36,7 @@ int main ()
 						std::cout << "start downloading\n";
 						nameFile = data;
 						std::cout << "file name: " << data << std::endl;
-						server_socket.sendFile(nameFile);
+						server_socket.sendFile(nameFile, new_sock);
 						std::cout << "--------------------@\n";
 					} else if (data == "upload")
 					{

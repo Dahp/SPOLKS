@@ -58,7 +58,7 @@ void ServerSocket::accept(ServerSocket &sock)
     }
 }
 
-void ServerSocket::recvFile(const std::string s ) const
+void ServerSocket::recvFile( std::string& s ) const
 {
   if ( ! Socket::recvF ( s ) )
   {
@@ -66,9 +66,9 @@ void ServerSocket::recvFile(const std::string s ) const
   }
 }
 
-void ServerSocket::sendFile(const std::string s ) const
+void ServerSocket::sendFile( std::string& s, ServerSocket& sock )
 {
-  if ( ! Socket::sendF ( s ) )
+  if ( ! Socket::sendF ( s, sock ) )
   {
     throw SocketException ( "Could not send file." );
   }

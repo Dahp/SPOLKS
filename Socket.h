@@ -38,7 +38,7 @@ class Socket
   int recv ( std::string& ) const;//(1)почему тут передаем ссылку 
 
   //File transmission (файлы)
-  bool sendF ( const std::string& ) const;//override for send
+  bool sendF ( std::string&, Socket& );//override for send
   bool recvF ( const std::string& ) const;//override for recv
 
 

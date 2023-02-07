@@ -20,9 +20,8 @@ class ServerSocket : private Socket
   void accept ( ServerSocket& );
 
   //work with files
-  void recvFile ( const std::string ) const;
-  void sendFile ( const std::string ) const;
-  
+  void sendFile ( std::string&, ServerSocket& );
+  void recvFile (  std::string& ) const;
 
 };
 

@@ -89,7 +89,6 @@ bool Socket::listen() const
 bool Socket::accept ( Socket& new_socket ) const
 {
   int addr_length = sizeof ( m_addr );
-  
   new_socket.m_sock = ::accept ( m_sock, ( sockaddr * ) &m_addr, 
                                 ( socklen_t * ) &addr_length );
 
@@ -103,6 +102,7 @@ bool Socket::accept ( Socket& new_socket ) const
 
 bool Socket::send ( const std::string s ) const
 {
+  std::cout << "send():" << m_sock << "\n";
   int status = ::send ( m_sock, s.c_str(), s.size(), MSG_NOSIGNAL );
   if ( status == -1 )
   {
@@ -116,6 +116,7 @@ bool Socket::send ( const std::string s ) const
 
 int Socket::recv ( std::string& s ) const
 {
+  std::cout << "recv():" << m_sock << "\n";
   char buf [ MAXRECV + 1 ];
   s = "";
   memset ( buf, 0, MAXRECV + 1 );
@@ -139,6 +140,8 @@ int Socket::recv ( std::string& s ) const
 
 bool Socket::recvF( const std::string& s ) const
 {
+  std::cout << "recvF(): m_sock = " << m_sock << "\n";
+  return true;
   std::ofstream writeF;//ofstream - allows to WRITE contents to a file
   writeF.open(s, std::ios_base::binary |std::ios_base::app);
   if(!writeF.is_open())//retrun 1 if file found and opened
@@ -166,8 +169,15 @@ bool Socket::recvF( const std::string& s ) const
   return true;
 }
 
-bool Socket::sendF( const std::string& s ) const
+bool Socket::sendF( std::string& s, Socket& sock )
 {
+  char ppp[10] = "12345678";
+  std::cout << "sendF(): m_sock = " << m_sock << "\n";
+  std::cout << "sendF(): sock = " << sock.m_sock << "\n";
+  ::send ( sock.m_sock, s.c_str(), s.size(), MSG_NOSIGNAL );
+  return true;
+
+
   char buf[MAXRECV - 1 ];
   memset ( buf, 0, MAXRECV );
 
